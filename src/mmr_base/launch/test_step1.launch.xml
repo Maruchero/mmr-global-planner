@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <!-- start sensors -->
+        <include file="$(find-pkg-share mmr_base)/launch/start_sensors.launch.xml"/>
+    </group>
+    <group>
+        <!-- perception stack -->
+        <include file="$(find-pkg-share mmr_base)/launch/perception_stack.launch.xml">
+        </include>
+    </group>
+
+</launch>

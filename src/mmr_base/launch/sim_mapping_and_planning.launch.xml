@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <!-- estimation -->
+        <include file="$(find-pkg-share track_mapping)/launch/track_mapping.launch.py"/>
+        <!-- <include file="$(find-pkg-share ekf_slam)/launch/ekf_slam_launch.py"/>  -->
+    </group>
+    <group>
+        <!-- planning -->
+        <include file="$(find-pkg-share lap_counter)/launch/lap_counter.launch.py"/>
+        <include file="$(find-pkg-share local_planner)/launch/local_planner.launch.py"/>
+    </group>
+
+    <group>
+        <!-- control -->
+        <!-- <include file="$(find-pkg-share ros_wrapper)/launch/ros_wrapper.launch.py"/> -->
+        <include file="$(find-pkg-share pure_pursuit)/launch/sim_pure_pursuit.launch.py"/>
+    </group>
+
+</launch>

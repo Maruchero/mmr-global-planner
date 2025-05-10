@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <!-- xsense. This launch is not inside start_sensors.launch because the perception stack is launched after turning on the engine, hence,
+        allowing the IMU to reset orientation during realistic driving conditions -->
+        <include file="$(find-pkg-share xsens_mti_driver)/launch/xsens_mti_node.launch.py"/>
+    </group>
+
+    <group>
+        <!-- clustering -->
+        <include file="$(find-pkg-share clustering_plane_finder_cpu)/launch/clustering_plane_finder_cpu_launch.py"/>
+    </group>
+
+    <group>
+        <!-- tkdnn -->
+        <include file="$(find-pkg-share tkdnn_ros2)/launch/tkdnn_ros2_launch.py"/>
+    </group>
+
+    <group>
+         <!-- fast lio -->
+        <include file="$(find-pkg-share fast_lio)/launch/fast_lio_launch.py"/>
+    </group>
+
+    <group>
+        <!-- fusion -->
+        <include file="$(find-pkg-share fusion)/launch/fusion_launch.py"/>
+    </group>
+</launch>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- tf_static --> 
+    <group>
+        <include file="$(find-pkg-share car_description)/launch/car_description_launch.py"/>
+    </group>
+    <group>
+        <!-- camera -->
+        <include file="$(find-pkg-share driver_camera)/launch/driver_camera_launch.py"/>
+    </group>
+
+    <group>
+        <!-- lidar -->
+        <include file="$(find-pkg-share velodyne)/launch/velodyne-all-nodes-VLP32C-launch.py"/>
+    </group>
+    
+    <!-- gps 
+    <group>
+        <include file="$(find-pkg-share driver_gps)/launch/driver_gps_launch.py"/>
+    </group> 
+-->
+</launch>

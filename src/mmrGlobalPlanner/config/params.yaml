@@ -1,0 +1,74 @@
+/global_planner:
+  ros__parameters:
+    car_config:
+      # set name of ggv diagram and ax_max_machines files to use
+      ggv_file: "ggv.csv"
+      ax_max_machines_file: "ax_max_machines.csv"
+      
+      # stepsize options
+      stepsize_opts:
+        stepsize_prep: 1.0  # [m] used for linear interpolation before spline approximation
+        stepsize_reg: 3.0    # [m] used for spline interpolation after spline approximation (stepsize during opt.)
+        stepsize_interp_after_opt: 1.0  #[m] used for spline interpolation after optimization
+
+      # spline regression smooth options
+      reg_smooth_opts:
+        k_reg: 3   # [-] order of B-Splines -> standard: 3
+        s_reg: 1   # [-] smoothing factor, range [1.0, 100.0]
+
+      # general vehicle parameters required in several functions
+      veh_params:
+        v_max: 20.0       # [m/s] maximal vehicle speed
+        length: 2.5       # [m] vehicle length
+        width: 1.1        # [m] vehicle width
+        mass: 300.0       # [kg] vehicle mass
+        dragcoeff: 0.75   # [kg*m2/m3] drag coefficient calculated by 0.5 * rho_air * c_w * A_front
+        curvlim: 99       # [rad/m] curvature limit of the vehicle
+        g: 9.81           # [N/kg] gravity acceleration
+
+      # velocity profile calculation options
+      vel_calc_opts:
+        dyn_model_exp: 1.0   # [-] exponent used in the vehicle dynamics model (range [1.0, 2.0])
+        vel_profile_conv_filt_window: -1 # [-] moving average filter window size for velocity profile (set -1 if not used)
+
+    optimization_opt:
+      # optimization problem options (minimum curvature optimization)
+      optim_opts_mincurv:
+        width_opt: 1.5          # [m] vehicle width for optimization including safety distance
+        iqp_iters_min: 3         # [-] minimum number of iterations for the IQP
+        iqp_curverror_allowed: 1    # Allows the curvature error for IQP
+
+    misc:
+      savePointsPath: false # to save boundaries
+      fakeDistance: 1.5  # distance to apply when using legacy topic
+      legacylocalTopic: true # legacy topic
+      debug: true #print some more debugging info
+
+
+    #NON TOCCARE LE SEGUENTI CONFIG SE NON SAI COSA STAI FACENDO
+
+    # set import options  
+    imp_opts:
+      min_track_width: -1  # [m] minimum enforced track width (set -1 to deactivate)
+
+    # lap time calculation table 
+    lap_time_mat_opts:
+      use_lap_time_mat: false        # calculate a lap time matrix (diff. top speeds and scales)
+      gg_scale_range: [0.3, 1.0]     # range of gg scales to be covered
+      gg_scale_stepsize: 0.05        # step size to be applied
+      top_speed_range: [100.0, 150.0] # range of top speeds to be simulated [in km/h]
+      top_speed_stepsize: 5.0        # step size to be applied
+      file: "lap_time_matrix.csv"    # file name of the lap time matrix (stored in "outputs")
+
+    # plot options
+    plot_opts:
+      mincurv_curv_lin: false         # plot curv. linearization (original and solution based) (mincurv only)
+      raceline: true                 # plot optimized path - DEBUG TRUE
+      imported_bounds: false          # plot imported bounds (analyze difference to interpolated bounds)
+      raceline_curv: false            # plot curvature profile of optimized path - DEBUG TRUE
+      racetraj_vel: false             # plot velocity profile - DEBUG TRUE
+      racetraj_vel_3d: false          # plot 3D velocity profile above raceline
+      racetraj_vel_3d_stepsize: 1.0   # [m] vertical lines stepsize in 3D velocity profile plot
+      spline_normals: false           # plot spline normals to check for crossings
+      mintime_plots: false            # plot states, controls, friction coeffs etc. (mintime only)
+      racetraj_vel_3d_simple: true    # plot 3D velocity profile above raceline (simple)

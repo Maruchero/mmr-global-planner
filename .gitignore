@@ -1,0 +1,6 @@
+__pycache__
+src/mmrGlobalPlanner/global_planner/outputs
+log
+install
+build
+.vscode

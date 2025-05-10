@@ -1,0 +1,4 @@
+float32 aps_percentage
+float32 brake_torque
+float32 actual_speed
+float32 target_speed

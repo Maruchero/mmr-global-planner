@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <!-- estimation -->
+        <!-- <include file="$(find-pkg-share track_mapping)/launch/track_mapping.launch.py"/> -->
+        <include file="$(find-pkg-share mmr_ekf_odometry)/launch/mmr_ekf_odometry.launch.py"/>
+    </group>
+    <group>
+        <!-- planning -->
+        <include file="$(find-pkg-share lap_counter)/launch/lap_counter.launch.py">
+            <arg name="event_type" value="autocross"/>
+        </include>
+        <include file="$(find-pkg-share local_planner)/launch/local_planner.launch.py">
+            <arg name="event_type" value="track_drive"/>
+        </include>
+    </group>
+
+    <group>
+        <!-- control -->
+        <!-- <include file="$(find-pkg-share canopen_bridge)/launch/canopen_bridge_launch.py"/> -->
+        <include file="$(find-pkg-share pure_pursuit)/launch/autocross_pure_pursuit.launch.py"/>
+    </group>
+
+</launch>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <!-- perception -->
+        <!-- <include file="$(find-pkg-share car_description)/launch/car_description_launch.py"/> 
+        <include file="$(find-pkg-share clustering_plane_finder_cpu)/launch/clustering_plane_finder_cpu_launch.py"/>
+        <include file="$(find-pkg-share fusion)/launch/fusion_launch.py"/>  -->
+    </group>
+
+    <group>
+        <!-- estimation -->
+        <!-- <include file="$(find-pkg-share track_mapping)/launch/track_mapping.launch.py"/> -->
+        <include file="$(find-pkg-share mmr_ekf_odometry)/launch/mmr_ekf_odometry.launch.py"/> 
+    </group>
+    <group>
+        <!-- planning -->
+        <include file="$(find-pkg-share lap_counter)/launch/lap_counter.launch.py"/>
+        <!-- <include file="$(find-pkg-share local_planner)/launch/local_planner.launch.py"/> -->
+    </group>
+
+    <group>
+        <!-- control -->
+        <!-- <include file="$(find-pkg-share canopen_bridge)/launch/canopen_bridge_launch.py"/> -->
+        <include file="$(find-pkg-share pure_pursuit)/launch/sim_pure_pursuit.launch.py"/>
+    </group>
+
+</launch>

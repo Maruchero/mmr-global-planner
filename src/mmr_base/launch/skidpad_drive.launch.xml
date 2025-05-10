@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <!-- estimation -->
+        <!-- <include file="$(find-pkg-share track_mapping)/launch/track_mapping.launch.py"/> -->
+        <include file="$(find-pkg-share mmr_ekf_odometry)/launch/mmr_ekf_odometry.launch.py">
+            <arg name="is_skidpad_mission" value="true"/>
+        </include>
+    </group>
+    <group>
+        <!-- planning -->
+        <include file="$(find-pkg-share lap_counter)/launch/lap_counter.launch.py">
+            <arg name="event_type" value="skidpad"/>
+        </include>
+        <include file="$(find-pkg-share local_planner)/launch/local_planner.launch.py">
+            <arg name="event_type" value="skidpad"/>
+        </include>
+    </group>
+</launch>

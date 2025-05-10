@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+    <group>
+        <include file="$(find-pkg-share mmr_ekf_odometry)/launch/mmr_ekf_odometry.launch.py"/>
+    </group>
+    <group>
+        <include file="$(find-pkg-share lap_counter)/launch/lap_counter.launch.py">
+            <arg name="event_type" value="acceleration"/>
+        </include>
+        <include file="$(find-pkg-share local_planner)/launch/local_planner.launch.py">
+            <arg name="event_type" value="acceleration"/>
+        </include>
+    </group>
+</launch>
