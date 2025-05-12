@@ -22,6 +22,7 @@ setup(
     entry_points={
         'console_scripts': [
             'global_planner = global_planner.global_planner_node:main',
+            'centerline_publisher = global_planner.centerline_publisher_node:main',
         ]
 
     },
