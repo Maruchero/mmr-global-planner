@@ -2,8 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from mmr_base.msg import Marker
-from mmr_base.msg import RaceStatus
-from common_msgs.msg import TrajectoryPoints, TrajectoryPoint
+from common_msgs.msg import TrajectoryPoints, TrajectoryPoint, RaceStatus
 from ackermann_msgs.msg import AckermannDrive
 from geometry_msgs.msg import Point
 
