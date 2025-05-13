@@ -44,3 +44,16 @@ At this point you will be able to launch the global planner node.
 ```bash
 ros2 launch global_planner global_planner.launch.py
 ```
+
+#### PRO tips
+
+1. You just need to create the container once. The next time you'll need to use the global planner you will just need to start the container:
+    ```bash
+    docker start -i mmr-global-planner
+    ```
+
+1. If you need to open another terminal in the docker container run this command:
+
+    ```bash
+    docker exec -it mmr-global-planner bash
+    ```
