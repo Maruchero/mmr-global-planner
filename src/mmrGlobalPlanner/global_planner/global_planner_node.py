@@ -3,7 +3,7 @@ from rclpy.node import Node
 
 from mmr_base.msg import Marker
 from mmr_base.msg import RaceStatus
-from mmr_base.msg import SpeedProfilePoint, SpeedProfilePoints
+from common_msgs.msg import TrajectoryPoints, TrajectoryPoint
 from ackermann_msgs.msg import AckermannDrive
 from geometry_msgs.msg import Point
 
@@ -33,7 +33,7 @@ class GlobalPlanner(Node):
             10)
 
         self.speed_profile_pub = self.create_publisher(
-            SpeedProfilePoints, '/planning/speedProfilePoints', 10)
+            TrajectoryPoints, '/planning/trajectoryPoints', 10)
 
         self.track = Track(debug=self.params_dict['misc']['debug'])
         self.trajectory = Trajectory(params=self.params_dict)
@@ -239,15 +239,18 @@ class GlobalPlanner(Node):
 
         points_list = []
         output_iterator = zip(
-            output["raceline"], output["speed"], output["acceleration"], output["heading"])
-        for raceline, speed, acceleration, heading in output_iterator:
-            p = SpeedProfilePoint()
-            p.point = Point(x=raceline[0], y=raceline[1])
-            p.ackerman_point = AckermannDrive(
-                speed=speed, acceleration=acceleration, steering_angle=heading)
+            output["raceline"], output["speed"], output["heading"])
+        for raceline, speed, heading in output_iterator:
+            p = TrajectoryPoint(
+                pose=Point(x=raceline[0], y=raceline[1]),
+                track_yaw=heading,
+                curvature=0.0,
+                s=0.0,
+                speed=speed
+            )
             points_list.append(p)
 
-        self.speed_profile_pub.publish(SpeedProfilePoints(points=points_list))
+        self.speed_profile_pub.publish(TrajectoryPoints(points=points_list))
         self.get_logger().info('Published.')
 
 

@@ -295,6 +295,14 @@ class Trajectory:
         return "Optimization finished"
 
     def get_trajectory_opt(self):
+        """
+        Returns a dict with the optimized trajectory data.
+        The dict contains the following keys:
+        - "raceline": The optimized raceline as a numpy array.
+        - "speed": The optimized speed profile as a numpy array.
+        - "acceleration": The optimized acceleration profile as a numpy array.
+        - "heading": The optimized heading profile as a numpy array.
+        """
         assert self._trajectory_opt, "Output trajectory called before initialization."
         return self._trajectory_opt
         
