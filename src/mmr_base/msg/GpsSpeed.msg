@@ -1,2 +1,0 @@
-float64 gps_speed_mps
-float64 gps_speed_kph

@@ -1,1 +1,0 @@
-uint8 as_state

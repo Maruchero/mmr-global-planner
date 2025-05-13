@@ -4,7 +4,7 @@ import csv
 import os
 import rclpy
 from rclpy.node import Node
-from mmr_base.msg import Marker
+from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point
 
 
