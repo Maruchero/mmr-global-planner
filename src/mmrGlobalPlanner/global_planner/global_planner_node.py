@@ -8,6 +8,7 @@ from geometry_msgs.msg import Point
 from .global_track import Track
 from .global_trajectory import Trajectory
 import time
+from elaborate_output import elaborate_output
 
 
 class GlobalPlanner(Node):
@@ -235,20 +236,25 @@ class GlobalPlanner(Node):
         if (self.params_dict["misc"]["debug"]):
             self.get_logger().info(f'{output}')
 
-        points_list = []
-        output_iterator = zip(
-            output["raceline"], output["speed"], output["heading"])
-        for raceline, speed, heading in output_iterator:
-            p = TrajectoryPoint(
-                pose=Point(x=raceline[0], y=raceline[1]),
-                track_yaw=heading,
-                curvature=0.0,
-                s=0.0,
-                speed=speed
-            )
-            points_list.append(p)
+        # Resampling the trajectory
+        out = elaborate_output(output["raceline"][0], output["raceline"][1], output["heading"], output["speed"])
 
-        self.speed_profile_pub.publish(TrajectoryPoints(points=points_list))
+        points_list = TrajectoryPoints()
+        points_list.header.frame_id = 'track'
+        points_list.header.stamp = self.get_clock().now()
+        output_iterator = zip(
+                out['x'], out['y'], out['phi'], out['r'], out['vx'], out['s'])
+        for x, y, phi, r, vx, s in output_iterator:
+            p = TrajectoryPoint(
+                pose = Point(x, y),
+                track_yaw = phi,
+                radius = r,
+                s = s,
+                speed = vx
+            )
+            points_list.points.append(p)
+
+        self.speed_profile_pub.publish(points_list)
         self.get_logger().info('Published.')
 
 
