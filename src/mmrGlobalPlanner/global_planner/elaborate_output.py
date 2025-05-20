@@ -3,15 +3,14 @@ import scipy.integrate
 import numpy as np
 import math
 
-def elaborate_output(x, y, phi, vx):
+def elaborate_output(raceline, phi, vx):
   """
   This function resamples the path of the global planner:
   - adds the curvature and s parameters
   - rotates the phi by 90 degrees
 
   Args:
-    x (list): x coordinates of the path
-    y (list): y coordinates of the path
+    raceline (list): a list of tuples representing the raceline points (x, y)
     phi (list): angles of the path
     vx (list): velocities of the path
 
@@ -25,7 +24,7 @@ def elaborate_output(x, y, phi, vx):
       - s: arc length of the path
   """
 
-  tck, _ = scipy.interpolate.splprep([x, y], per=1, s=0.0)
+  tck, _ = scipy.interpolate.splprep(np.array(raceline).T, per=1, s=0.0)
 
   def dlength(s, tck):
     # The derivative of the length is just the 2-norm of the derivative

@@ -237,16 +237,16 @@ class GlobalPlanner(Node):
             self.get_logger().info(f'{output}')
 
         # Resampling the trajectory
-        out = elaborate_output(output["raceline"][0], output["raceline"][1], output["heading"], output["speed"])
+        out = elaborate_output(output["raceline"], output["heading"], output["speed"])
 
         points_list = TrajectoryPoints()
         points_list.header.frame_id = 'track'
-        points_list.header.stamp = self.get_clock().now()
+        points_list.header.stamp = self.get_clock().now().to_msg()
         output_iterator = zip(
                 out['x'], out['y'], out['phi'], out['r'], out['vx'], out['s'])
         for x, y, phi, r, vx, s in output_iterator:
             p = TrajectoryPoint(
-                pose = Point(x, y),
+                pose = Point(x=x, y=y),
                 track_yaw = phi,
                 radius = r,
                 s = s,
