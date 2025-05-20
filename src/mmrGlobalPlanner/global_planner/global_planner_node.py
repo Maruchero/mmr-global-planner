@@ -8,7 +8,7 @@ from geometry_msgs.msg import Point
 from .global_track import Track
 from .global_trajectory import Trajectory
 import time
-from elaborate_output import elaborate_output
+from .elaborate_output import elaborate_output
 
 
 class GlobalPlanner(Node):

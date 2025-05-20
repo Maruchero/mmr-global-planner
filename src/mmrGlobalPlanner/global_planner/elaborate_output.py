@@ -1,6 +1,5 @@
 import scipy.interpolate
 import scipy.integrate
-import pandas as pd
 import numpy as np
 import math
 
@@ -26,13 +25,7 @@ def elaborate_output(x, y, phi, vx):
       - s: arc length of the path
   """
 
-  df = pd.DataFrame({
-    "x": x,
-    "y": y,
-    "phi": phi,
-    "vx": vx
-  })
-  tck, u = scipy.interpolate.splprep(df[['x', 'y']].values.T, per=1, s=0.0)
+  tck, _ = scipy.interpolate.splprep([x, y], per=1, s=0.0)
 
   def dlength(s, tck):
     # The derivative of the length is just the 2-norm of the derivative
