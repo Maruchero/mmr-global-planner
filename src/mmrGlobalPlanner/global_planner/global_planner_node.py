@@ -18,21 +18,21 @@ class GlobalPlanner(Node):
         super().__init__('race_status_sub')
         self.params_dict = self.get_params()
         self.got_it = False
-
+        
         self.race_status_sub = self.create_subscription(
             RaceStatus,
-            '/planning/race_status',
+            self.params_dict['topics']['race_status'],
             self.__race_status_sub_callback,
             10)
 
         self.centerline_sub = self.create_subscription(
             Marker,
-            '/planning/center_line_completed',
+            self.params_dict['topics']['center_line_completed'],
             self.__centerline_sub_callback,
             10)
 
         self.speed_profile_pub = self.create_publisher(
-            TrajectoryPoints, '/planning/trajectoryPoints', 10)
+            TrajectoryPoints, self.params_dict['topics']['trajectory_points'], 10)
 
         self.track = Track(debug=self.params_dict['misc']['debug'])
         self.trajectory = Trajectory(params=self.params_dict)
@@ -50,6 +50,17 @@ class GlobalPlanner(Node):
     def get_params(self):
         params_dict = {}
         # generated params loader for ROS
+        params_dict['topics'] = {}
+        self.declare_parameter('topics.race_status')
+        params_dict['topics']['race_status'] = self.get_parameter(
+            'topics.race_status').value
+        self.declare_parameter('topics.center_line_completed')
+        params_dict['topics']['center_line_completed'] = self.get_parameter(
+            'topics.center_line_completed').value
+        self.declare_parameter('topics.trajectory_points')
+        params_dict['topics']['trajectory_points'] = self.get_parameter(
+            'topics.trajectory_points').value
+
         params_dict['car_config'] = {}
         self.declare_parameter('car_config.ggv_file')
         params_dict['car_config']['ggv_file'] = self.get_parameter(
@@ -105,6 +116,7 @@ class GlobalPlanner(Node):
             'car_config.vel_calc_opts.vel_profile_conv_filt_window')
         params_dict['car_config']['vel_calc_opts']['vel_profile_conv_filt_window'] = self.get_parameter(
             'car_config.vel_calc_opts.vel_profile_conv_filt_window').value
+        
         params_dict['optimization_opt'] = {}
         params_dict['optimization_opt']['optim_opts_mincurv'] = {}
         self.declare_parameter('optimization_opt.optim_opts_mincurv.width_opt')
@@ -118,6 +130,7 @@ class GlobalPlanner(Node):
             'optimization_opt.optim_opts_mincurv.iqp_curverror_allowed')
         params_dict['optimization_opt']['optim_opts_mincurv']['iqp_curverror_allowed'] = self.get_parameter(
             'optimization_opt.optim_opts_mincurv.iqp_curverror_allowed').value
+        
         params_dict['misc'] = {}
         self.declare_parameter('misc.savePointsPath')
         params_dict['misc']['savePointsPath'] = self.get_parameter(
@@ -130,10 +143,12 @@ class GlobalPlanner(Node):
             'misc.legacylocalTopic').value
         self.declare_parameter('misc.debug')
         params_dict['misc']['debug'] = self.get_parameter('misc.debug').value
+
         params_dict['imp_opts'] = {}
         self.declare_parameter('imp_opts.min_track_width')
         params_dict['imp_opts']['min_track_width'] = self.get_parameter(
             'imp_opts.min_track_width').value
+        
         params_dict['lap_time_mat_opts'] = {}
         self.declare_parameter('lap_time_mat_opts.use_lap_time_mat')
         params_dict['lap_time_mat_opts']['use_lap_time_mat'] = self.get_parameter(
@@ -153,6 +168,7 @@ class GlobalPlanner(Node):
         self.declare_parameter('lap_time_mat_opts.file')
         params_dict['lap_time_mat_opts']['file'] = self.get_parameter(
             'lap_time_mat_opts.file').value
+        
         params_dict['plot_opts'] = {}
         self.declare_parameter('plot_opts.mincurv_curv_lin')
         params_dict['plot_opts']['mincurv_curv_lin'] = self.get_parameter(
