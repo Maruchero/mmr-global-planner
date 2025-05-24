@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from visualization_msgs.msg import Marker
-from common_msgs.msg import TrajectoryPoints, TrajectoryPoint, RaceStatus
+from mmr_base.msg import SpeedProfilePoints, SpeedProfilePoint, RaceStatus
 from geometry_msgs.msg import Point
 
 from .global_track import Track
@@ -32,7 +32,7 @@ class GlobalPlanner(Node):
             10)
 
         self.speed_profile_pub = self.create_publisher(
-            TrajectoryPoints, self.params_dict['topics']['trajectory_points'], 10)
+            SpeedProfilePoints, self.params_dict['topics']['trajectory_points'], 10)
 
         self.track = Track(debug=self.params_dict['misc']['debug'])
         self.trajectory = Trajectory(params=self.params_dict)
@@ -255,19 +255,10 @@ class GlobalPlanner(Node):
         # Resampling the trajectory
         out = elaborate_output(output["raceline"], output["heading"], output["speed"])
 
-        points_list = TrajectoryPoints()
-        points_list.header.frame_id = 'track'
-        points_list.header.stamp = self.get_clock().now().to_msg()
-        output_iterator = zip(
-                out['x'], out['y'], out['phi'], out['r'], out['s'])
-        for x, y, phi, r, s in output_iterator:
-            p = TrajectoryPoint(
-                pose = Point(x=x, y=y),
-                track_yaw = phi,
-                radius = r,
-                s = s,
-                speed = 0.0
-            )
+        points_list = SpeedProfilePoints()
+        output_iterator = zip(out['x'], out['y'])
+        for x, y in output_iterator:
+            p = SpeedProfilePoint(point = Point(x=x, y=y))
             points_list.points.append(p)
 
         self.speed_profile_pub.publish(points_list)
