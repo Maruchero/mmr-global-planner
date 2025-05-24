@@ -2,8 +2,8 @@
   ros__parameters:
     topics:
       race_status: "/planning/race_status"
-      center_line_completed: "/planning/center_line_completed"
-      trajectory_points: "/planning/trajectory_points"
+      center_line_completed: "/planning/center_line_completed_delunay"
+      trajectory_points: "/planning/global_centerline"
 
     car_config:
       # set name of ggv diagram and ax_max_machines files to use

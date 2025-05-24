@@ -259,14 +259,14 @@ class GlobalPlanner(Node):
         points_list.header.frame_id = 'track'
         points_list.header.stamp = self.get_clock().now().to_msg()
         output_iterator = zip(
-                out['x'], out['y'], out['phi'], out['r'], out['vx'], out['s'])
-        for x, y, phi, r, vx, s in output_iterator:
+                out['x'], out['y'], out['phi'], out['r'], out['s'])
+        for x, y, phi, r, s in output_iterator:
             p = TrajectoryPoint(
                 pose = Point(x=x, y=y),
                 track_yaw = phi,
                 radius = r,
                 s = s,
-                speed = vx
+                speed = 0.0
             )
             points_list.points.append(p)
 
