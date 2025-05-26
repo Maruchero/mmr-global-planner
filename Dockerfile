@@ -12,37 +12,29 @@ RUN apt update && \
 	curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg && \
 	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null && \
 	apt update && \
-	apt install -y openssh-server \
-	git \ 
-	build-essential \
-	tmux \
-	vim \
+	apt install -y build-essential \
 	ros-foxy-desktop \
 	python3-argcomplete \
 	ros-dev-tools \
 	ros-foxy-rosbag2-storage-mcap \
-  ros-foxy-ackermann-msgs
+  	ros-foxy-ackermann-msgs
 
 RUN mkdir /var/run/sshd
 RUN echo "mmr:mmr" | chpasswd
-COPY ./sshd_config /etc/ssh/sshd_config
-RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
-
-EXPOSE 22
 
 COPY --chown=mmr:mmr ./bashrc /home/mmr/.bashrc
 RUN mkdir -p /home/mmr/.cache/xdgr && chown mmr:mmr /home/mmr/.cache/xdgr
-RUN apt install -y python3-pip python3-venv can-utils iproute2
+RUN apt install -y python3-pip
 
-RUN mkdir -p /home/mmr/global_planner_env/src && chown -R mmr:mmr /home/mmr/global_planner_env
-COPY --chown=mmr:mmr ./src/ /home/mmr/global_planner_env/src
+COPY ./gp_env/src/mmrGlobalPlanner/requirements.txt /home/mmr/requirements.txt
 
 # USER mmr
 
 RUN python3 -m pip uninstall numpy scipy matplotlib quadprog trajectory_planning_helpers pyyaml
-RUN python3 -m pip install -r /home/mmr/global_planner_env/src/mmrGlobalPlanner/requirements.txt
+RUN python3 -m pip install -r /home/mmr/requirements.txt
 
-# USER root
+USER mmr
+WORKDIR /home/mmr/gp_env
 
 # start sshd
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/bin/bash"]

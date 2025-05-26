@@ -1,8 +1,8 @@
 services: 
   pc:
     build: .
-    ports:
-      - 2229:22
+    stdin_open: true
+    tty: true
     volumes:
-      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
-
+      - "./gp_env/:/home/mmr/gp_env/:rw"
+    command: ["/bin/bash", "-c", "chmod +x /home/mmr/gp_env/run_global.sh && /home/mmr/gp_env/run_global.sh"]
