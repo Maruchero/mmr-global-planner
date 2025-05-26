@@ -1,0 +1,8 @@
+services: 
+  pc:
+    build: .
+    ports:
+      - 2229:22
+    volumes:
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+
