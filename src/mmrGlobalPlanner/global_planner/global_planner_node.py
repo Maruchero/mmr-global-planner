@@ -266,7 +266,7 @@ class GlobalPlanner(Node):
                 track_yaw = phi,
                 radius = r,
                 s = s,
-                speed = 0.0
+                target_speed = 0.0
             )
             points_list.points.append(p)
 
