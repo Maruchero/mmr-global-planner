@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 
 from visualization_msgs.msg import Marker
-from common_msgs.msg import TrajectoryPoints, TrajectoryPoint, RaceStatus
+from common_msgs.msg import TrajectoryPoints, TrajectoryPoint
 from geometry_msgs.msg import Point
 
 from .global_track import Track
@@ -12,18 +12,10 @@ from .elaborate_output import elaborate_output
 
 
 class GlobalPlanner(Node):
-    __current_lap = 0
-
     def __init__(self):
         super().__init__('race_status_sub')
         self.params_dict = self.get_params()
         self.got_it = False
-        
-        self.race_status_sub = self.create_subscription(
-            RaceStatus,
-            self.params_dict['topics']['race_status'],
-            self.__race_status_sub_callback,
-            10)
 
         self.centerline_sub = self.create_subscription(
             Marker,
@@ -228,16 +220,6 @@ class GlobalPlanner(Node):
         self.get_logger().info(
             f'Callback execution time: {elapsed_time:.4f} seconds')
 
-    def __race_status_sub_callback(self, msg: RaceStatus):
-        # currentLap represent the number of laps completed.
-        if msg.current_lap != self.__current_lap:
-            self.__current_lap = msg.current_lap
-            if self.__current_lap == 1:
-                self.get_logger().info('Lap 1 started.')
-            else:
-                self.get_logger().info(
-                    f'Lap {int(self.__current_lap)-1} completed.')
-
     def elaborateTrackline(self):
         self.get_logger().info('Elaborating Trackline')
         outcome_msg = self.trajectory.optimize(self.track.get_reftrack())
@@ -279,7 +261,7 @@ def main(args=None):
 
     global_sub = GlobalPlanner()
 
-    rclpy.spin(global_sub)
+    rclpy.spin_once(global_sub)
 
     global_sub.destroy_node()
     rclpy.shutdown()
